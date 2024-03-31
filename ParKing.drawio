@@ -1,0 +1,54 @@
+<mxfile host="Electron" modified="2024-03-31T12:10:38.848Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.1.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="KKkMbrX3Ky_yMy_jqkJr" version="23.1.5" type="device">
+  <diagram name="Page-1" id="sN34N8y_dkwjcH_yurss">
+    <mxGraphModel dx="683" dy="400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="DXspjp16FR_fmvdhCEa0-1" value="" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="140" y="340" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DXspjp16FR_fmvdhCEa0-4" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="120" width="270" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="DXspjp16FR_fmvdhCEa0-6" value="Odradi uplatu" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="130" width="75" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DXspjp16FR_fmvdhCEa0-15" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="DXspjp16FR_fmvdhCEa0-8" target="DXspjp16FR_fmvdhCEa0-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="DXspjp16FR_fmvdhCEa0-8" value="pronađi mjesto" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="270" width="75" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DXspjp16FR_fmvdhCEa0-19" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="DXspjp16FR_fmvdhCEa0-9">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="180" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DXspjp16FR_fmvdhCEa0-9" value="pregledaj povjest parkiranja" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="180" width="75" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DXspjp16FR_fmvdhCEa0-20" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="DXspjp16FR_fmvdhCEa0-10">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="180" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DXspjp16FR_fmvdhCEa0-10" value="rezerviraj parkirno mjesto" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="370" width="75" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DXspjp16FR_fmvdhCEa0-21" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="DXspjp16FR_fmvdhCEa0-12">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="180" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DXspjp16FR_fmvdhCEa0-12" value="upravljaj parkirnim mjestima" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="480" width="75" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DXspjp16FR_fmvdhCEa0-18" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="DXspjp16FR_fmvdhCEa0-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="170" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
