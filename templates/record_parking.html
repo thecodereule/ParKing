@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1>Record Parking</h1>
+
+<form action="/record_parking" method="post" id="parking-form">
+    <div class="form-group">
+        <label for="parking_mjesto_id">Parking Mjesto ID:</label>
+        <input type="number" id="parking_mjesto_id" name="parking_mjesto_id" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="registracija">Registracija:</label>
+        <input type="text" id="registracija" name="registracija" required>
+    </div>
+
+    <div class="form-group">
+        <label for="marka_vozila">Marka Vozila:</label>
+        <input type="text" id="marka_vozila" name="marka_vozila" required>
+    </div>
+
+    <div class="form-group">
+        <label for="model_vozila">Model Vozila:</label>
+        <input type="text" id="model_vozila" name="model_vozila" required>
+    </div>
+
+    <div class="form-group">
+        <label for="vrijeme_dolaska">Vrijeme Dolaska:</label>
+        <input type="datetime-local" id="vrijeme_dolaska" name="vrijeme_dolaska">
+    </div>
+    
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}

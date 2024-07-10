@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1>Vozila</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Registracija</th>
+        <th>Marka</th>
+        <th>Model</th>
+        <th>Parking ID</th>
+    </tr>
+    {% for vozilo in vozila %}
+    <tr>
+        <td>{{ vozilo.id }}</td>
+        <td>{{ vozilo.registracija }}</td>
+        <td>{{ vozilo.marka }}</td>
+        <td>{{ vozilo.model }}</td>
+        <td>{{ vozilo.parkingMjesto_id }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

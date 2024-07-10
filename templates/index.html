@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h1>Parking Mjesta</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Etaza</th>
+        <th>Sekcija</th>
+        <th>Je Okupirano</th>
+    </tr>
+    {% for parking_mjesto in parking_mjesta %}
+    <tr>
+        <td>{{ parking_mjesto.id }}</td>
+        <td>{{ parking_mjesto.etaza }}</td>
+        <td>{{ parking_mjesto.sekcija }}</td>
+        <td>{{ parking_mjesto.jeOkupirano }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h1>Add Parking Mjesto</h1>
+<form action="/add_parking_mjesto" method="post">
+    <label for="etaza">Etaza:</label>
+    <input type="number" id="etaza" name="etaza" required><br><br>
+    
+    <label for="sekcija">Sekcija:</label>
+    <input type="text" id="sekcija" name="sekcija" required><br><br>
+    
+    <label for="jeOkupirano">Je Okupirano:</label>
+    <input type="checkbox" id="jeOkupirano" name="jeOkupirano"><br><br>
+    
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock %}
