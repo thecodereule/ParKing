@@ -2,13 +2,15 @@
 
 {% block body %}
 <h1>Vozila</h1>
-<table>
+<table id="tablica">
     <tr>
         <th>ID</th>
         <th>Registracija</th>
         <th>Marka</th>
         <th>Model</th>
         <th>Parking ID</th>
+        <th>Vrijeme pocetka parkinga</th>
+        <th>Odjavi</th>
     </tr>
     {% for vozilo in vozila %}
     <tr>
@@ -17,6 +19,12 @@
         <td>{{ vozilo.marka }}</td>
         <td>{{ vozilo.model }}</td>
         <td>{{ vozilo.parkingMjesto_id }}</td>
+        <td>{{ vozilo.vrijemeDolaska.strftime('%H:%M %d.%m.%Y.') }}</td>
+        <td>
+            <form action="{{ url_for('odjavi_vozilo', vozilo_id=vozilo.id) }}" method="POST">
+                <button type ="submit">Odjavi</button>
+            </form>
+        </td>
     </tr>
     {% endfor %}
 </table>

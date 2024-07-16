@@ -45,6 +45,10 @@ a {
     color: white;
 }
 
+#tablica a {
+    color: black;
+}
+
 
 nav ul li {
     display: inline-block;

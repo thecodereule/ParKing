@@ -26,8 +26,11 @@ class Vozilo(db.Model):
     registracija = db.Column(db.String(50), nullable=False)
     marka = db.Column(db.String(50), nullable=False)
     model = db.Column(db.String(50), nullable=False)
+    vrijemeDolaska = db.Column(db.DateTime, default=datetime.now())
     parkingMjesto_id = db.Column(db.Integer, db.ForeignKey('ParkingMjesto.id'), nullable=True)
     parkingMjesto = db.relationship('ParkingMjesto', backref=db.backref('vozila', lazy=True))
+    
+
 
 
 class Karta(db.Model):
@@ -103,12 +106,32 @@ def record_parking_post():
 
 
     db.session.commit()
+
+    flash('Parking recorded successfully!')
     return redirect(url_for('index'))
 
 @app.route('/cars', methods=['GET'])
 def cars_get():
     vozila = Vozilo.query.all()
     return render_template('vozila.html', vozila=vozila)
+
+
+@app.route('/vozila/odjavi/<int:vozilo_id>', methods=['POST'])
+def odjavi_vozilo(vozilo_id):
+    vozilo = Vozilo.query.get(vozilo_id)
+    if not vozilo:
+        flash('Vozilo ne postoji.')
+        return redirect(url_for('index'))
+    
+    parking_mjesto = ParkingMjesto.query.get(vozilo.parkingMjesto_id)
+    if parking_mjesto:
+        parking_mjesto.jeOkupirano = False
+
+    db.session.delete(vozilo)
+    db.session.commit()
+
+    flash('Vozilo uspješno odjavljeno.')
+    return redirect(url_for('index'))
 
 
 if __name__ == "__main__":
