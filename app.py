@@ -41,16 +41,8 @@ class Karta(db.Model):
     vozilo_id = db.Column(db.Integer, db.ForeignKey('vozilo.id'), nullable=False)
     parkingMjesto_id = db.Column(db.Integer, db.ForeignKey('ParkingMjesto.id'), nullable=False)
     parkingMjesto = db.relationship('ParkingMjesto', backref=db.backref('karte', lazy=True))
-    Iznos = db.Column(db.Float, nullable=False)
-    jePlaceno = db.Column(db.Boolean, nullable=False)
-
-
-class Uplata (db.Model):
-    __tablename__ = 'Uplata'
-    id = db.Column(db.Integer, primary_key=True)
-    vrijemeUplate = db.Column(db.DateTime, nullable=False)
     iznos = db.Column(db.Float, nullable=False)
-    karta_id = db.Column(db.Integer, db.ForeignKey('Karta.id'), nullable=False)
+    jePlaceno = db.Column(db.Boolean, nullable=False)
 
 
 @app.route('/')
@@ -138,7 +130,7 @@ def odjavi_vozilo(vozilo_id):
         parkingMjesto_id=vozilo.parkingMjesto_id,
         vrijemeDolaska = vrijeme_dolaska,
         vrijemeOdlaska = vrijeme_odlaska,
-        Iznos = iznos,
+        iznos = iznos,
         jePlaceno = False
     )
 

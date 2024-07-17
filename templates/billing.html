@@ -20,7 +20,7 @@
         <td>{{ karta.parkingMjesto_id }}</td>
         <td>{{ karta.vrijemeDolaska.strftime('%H:%M %d.%m.%Y.') }}</td>
         <td>{{ karta.vrijemeOdlaska.strftime('%H:%M %d.%m.%Y.') }}</td>
-        <td>€{{ karta.Iznos | round(2) }} EUR</td>
+        <td>€{{ karta.iznos | round(2) }} EUR</td>
         <td>{{ karta.jePlaceno }}</td>
         <td>
             <form action="{{ url_for('plati_kartu', karta_id=karta.id) }}" method="POST">

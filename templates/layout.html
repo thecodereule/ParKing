@@ -9,14 +9,14 @@
         <label class="logo"><a href="/">ParkKingX</a></label>
         <ul>
             <li><a href="{{ url_for('add_parking_mjesto_get') }}">Manage Parking Spaces</a></li>
-            <li><a href="{{ url_for('cars_get') }}">Parkirana Vozila</a></li>
-            <li><a href="{{ url_for('record_parking_get') }}">Record Parkings</a></li>
+            <li><a href="{{ url_for('cars_get') }}">Vehicles Parked</a></li>
+            <li><a href="{{ url_for('record_parking_get') }}">Record Parking</a></li>
             <li><a href="{{ url_for('karte_get') }}">Billing</a></li>
         </ul>
     </nav>
     
     <!-- Flash messages block -->
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages() %}8
       {% if messages %}
         <ul class="flash-messages">
           {% for message in messages %}
