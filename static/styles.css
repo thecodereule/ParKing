@@ -1,3 +1,15 @@
+/* Ensure the body and html take full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content should take all available space */
+.main-content {
+    flex: 1;
+}
 
 
 * {
@@ -126,4 +138,29 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
     background-color: #0056b3;
+}
+
+footer {
+    background: #0082e6;
+    color: white;
+    height: 80px;
+    text-align: center;
+    line-height: 80px;
+    width: 100%;
+    position: sticky;
+    bottom: 0;
+}
+
+#pieChart {
+    max-width: 100%;
+    height: auto;
+    width: 500px;
+    height: 500px;
+    margin: 0px auto 75px;
+}
+
+h2 {
+    text-align: center;
+    margin: 100px 0px 50px 0px;
+    font-size: 40px;
 }

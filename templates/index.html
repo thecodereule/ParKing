@@ -1,5 +1,9 @@
 {% extends "layout.html" %}
 
+{% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
 {% block body %}
 
 <h1>Parking Mjesta</h1>
@@ -19,5 +23,36 @@
     </tr>
     {% endfor %}
 </table>
+
+<h2>Parking Spots Occupancy</h2>
+<canvas id="pieChart"></canvas>
+
+<script>
+    const ctx = document.getElementById('pieChart').getContext('2d');
+    const pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Occupied', 'Not Occupied'],
+            datasets: [{
+                data: [{{ occupied_count }}, {{ not_occupied_count }}],
+                backgroundColor: ['#FF6384', '#36A2EB'],
+            }]
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Currently Occupied Vs. Not Occupied Parking Spots'
+                
+                }
+            }
+        }
+    });
+</script>
 
 {% endblock %}

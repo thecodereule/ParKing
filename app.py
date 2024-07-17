@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sql'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'secret'
 db = SQLAlchemy(app)
@@ -48,7 +48,9 @@ class Karta(db.Model):
 @app.route('/')
 def index():
     parking_mjesta = ParkingMjesto.query.all()
-    return render_template('index.html', parking_mjesta=parking_mjesta)
+    occupied_count = sum(1 for parking_mjesto in parking_mjesta if parking_mjesto.jeOkupirano)
+    not_occupied_count = len(parking_mjesta) - occupied_count
+    return render_template('index.html', parking_mjesta=parking_mjesta, occupied_count=occupied_count, not_occupied_count=not_occupied_count)
 
 
 

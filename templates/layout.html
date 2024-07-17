@@ -3,29 +3,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/styles.css">
     <title>Base</title>
+    {% block head %}{% endblock %}
 </head>
 <body>
+  <div class="main-content">
     <nav>
-        <label class="logo"><a href="/">ParkKingX</a></label>
-        <ul>
-            <li><a href="{{ url_for('add_parking_mjesto_get') }}">Manage Parking Spaces</a></li>
-            <li><a href="{{ url_for('cars_get') }}">Vehicles Parked</a></li>
-            <li><a href="{{ url_for('record_parking_get') }}">Record Parking</a></li>
-            <li><a href="{{ url_for('karte_get') }}">Billing</a></li>
-        </ul>
-    </nav>
+      <label class="logo"><a href="/">ParkKingX</a></label>
+      <ul>
+          <li><a href="{{ url_for('add_parking_mjesto_get') }}">Manage Parking Spaces</a></li>
+          <li><a href="{{ url_for('cars_get') }}">Vehicles Parked</a></li>
+          <li><a href="{{ url_for('record_parking_get') }}">Record Parking</a></li>
+          <li><a href="{{ url_for('karte_get') }}">Billing</a></li>
+      </ul>
+  </nav>
+  
+  <!-- Flash messages block -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flash-messages">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  
+  {% block body %}{% endblock %}
+  </div>
     
-    <!-- Flash messages block -->
-    {% with messages = get_flashed_messages() %}8
-      {% if messages %}
-        <ul class="flash-messages">
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
     
-    {% block body %}{% endblock %}
+    <footer>
+        <p>© 2024 ParkKingX By Igor Tadić</p>
+    </footer>
+
 </body>
 </html>
