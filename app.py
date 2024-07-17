@@ -127,11 +127,51 @@ def odjavi_vozilo(vozilo_id):
     if parking_mjesto:
         parking_mjesto.jeOkupirano = False
 
+    vrijeme_dolaska = vozilo.vrijemeDolaska
+    vrijeme_odlaska = datetime.now()
+    trajanje_parkinga = (vrijeme_odlaska - vrijeme_dolaska).total_seconds() / 3600  # Duration in hours
+    iznos = 2 * trajanje_parkinga  # Assuming the rate is 2 units per hour
+
+
+    karta = Karta(
+        vozilo_id=vozilo_id,
+        parkingMjesto_id=vozilo.parkingMjesto_id,
+        vrijemeDolaska = vrijeme_dolaska,
+        vrijemeOdlaska = vrijeme_odlaska,
+        Iznos = iznos,
+        jePlaceno = False
+    )
+
+    db.session.add(karta)
     db.session.delete(vozilo)
     db.session.commit()
 
     flash('Vozilo uspješno odjavljeno.')
     return redirect(url_for('index'))
+
+
+@app.route('/karte', methods=['GET'])
+def karte_get():
+    karte = Karta.query.all()
+    return render_template('billing.html', karte=karte)
+
+
+@app.route('/karte/plati/<int:karta_id>', methods=['POST'])
+def plati_kartu(karta_id):
+    karta = Karta.query.get(karta_id)
+    if not karta:
+        flash('Karta ne postoji.')
+        return redirect(url_for('karte_get'))
+    
+    if karta.jePlaceno:
+        flash('Karta je već plaćena.')
+        return redirect(url_for('karte_get'))
+    
+    karta.jePlaceno = True
+    db.session.commit()
+
+    flash('Karta uspješno plaćena.')
+    return redirect(url_for('karte_get'))
 
 
 if __name__ == "__main__":

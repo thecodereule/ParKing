@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1>Billing</h1>
+<table id="tablica">
+    <tr>
+        <th>ID Karte</th>
+        <th>Vozilo ID</th>
+        <th>Parking Mjesto ID</th>
+        <th>Vrijeme pocetka parkinga</th>
+        <th>Vrijeme zavrsetka parkinga</th>
+        <th>Iznos</th>
+        <th>Je placeno</th>
+        <th>Plati</th>
+    </tr>
+    {% for karta in karte %}
+    <tr>
+        <td>{{ karta.id }}</td>
+        <td>{{ karta.vozilo_id }}</td>
+        <td>{{ karta.parkingMjesto_id }}</td>
+        <td>{{ karta.vrijemeDolaska.strftime('%H:%M %d.%m.%Y.') }}</td>
+        <td>{{ karta.vrijemeOdlaska.strftime('%H:%M %d.%m.%Y.') }}</td>
+        <td>€{{ karta.Iznos | round(2) }} EUR</td>
+        <td>{{ karta.jePlaceno }}</td>
+        <td>
+            <form action="{{ url_for('plati_kartu', karta_id=karta.id) }}" method="POST">
+                <button type ="submit">Plati</button>
+            </form>
+        </td>
+    {% endfor %}
+</table>
+{% endblock %}
