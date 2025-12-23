@@ -11,36 +11,32 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses:  actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
         run: |
-          docker build -t parking-app:latest . 
+          docker build -t parking-app: latest . 
           docker save parking-app:latest | gzip > parking-app.tar.gz
 
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/. ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
       - name: Copy Docker image to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host:  ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets. SERVER_USER }}
-          key:  ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SERVER_PORT }}
-          source: "parking-app.tar.gz"
-          target: "/home/itadic/"
+        run: |
+          scp -P ${{ secrets.SERVER_PORT }} -i ~/.ssh/id_rsa parking-app.tar.gz ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp/parking-app.tar.gz
 
       - name: Deploy on server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host:  ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets. SERVER_USER }}
-          key:  ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SERVER_PORT }}
-          script: |
+        run: |
+          ssh -p ${{ secrets.SERVER_PORT }} -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
             # Load novi Docker image
-            docker load < /home/itadic/parking-app. tar.gz
+            docker load < /tmp/parking-app.tar. gz
             
             # Zaustavi i obriši stari kontejner ako postoji
             docker stop parking-app 2>/dev/null || true
@@ -51,12 +47,13 @@ jobs:
               --name parking-app \
               --restart unless-stopped \
               -p 5000:5000 \
-              parking-app:latest
+              parking-app: latest
             
             # Očisti stare image-e
             docker image prune -f
             
             # Obriši privremeni fajl
-            rm -f /home/itadic/parking-app. tar.gz
+            rm -f /tmp/parking-app.tar. gz
             
             echo "Deployment completed successfully!"
+          EOF
