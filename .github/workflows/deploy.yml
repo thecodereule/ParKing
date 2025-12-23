@@ -19,23 +19,24 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t parking-app:latest .  
+          docker build -t parking-app:latest . 
           docker save parking-app:latest | gzip > parking-app.tar.gz
 
       - name: Setup SSH key
         run: |
-          mkdir -p ~/. ssh
-          echo "${{ secrets. SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_HOST }} >> ~/. ssh/known_hosts
+          chmod 700 ~/.ssh
+          ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
       - name: Copy Docker image to server
-        run:  |
+        run: |
           scp -P ${{ secrets.SERVER_PORT }} -i ~/.ssh/id_rsa parking-app.tar.gz ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp/parking-app.tar.gz
 
       - name: Deploy on server
         run: |
-          ssh -p ${{ secrets. SERVER_PORT }} -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          ssh -p ${{ secrets.SERVER_PORT }} -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
             # Zaustavi i obriši stari kontejner
             docker stop parking-app 2>/dev/null || true
             docker rm parking-app 2>/dev/null || true
@@ -44,7 +45,7 @@ jobs:
             docker rmi -f $(docker images -q parking-app) 2>/dev/null || true
             
             # Učitaj NOVI image
-            docker load < /tmp/parking-app.tar.gz
+            docker load < /tmp/parking-app.tar. gz
             
             # Pokreni novi kontejner
             docker run -d \
@@ -55,7 +56,7 @@ jobs:
             
             # Cleanup
             docker image prune -f
-            rm -f /tmp/parking-app. tar.gz
+            rm -f /tmp/parking-app.tar. gz
             
             echo "Deployment completed successfully!"
           EOF
