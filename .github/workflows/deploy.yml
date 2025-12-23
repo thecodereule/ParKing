@@ -1,0 +1,62 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses:  actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          docker build -t parking-app:latest .
+          docker save parking-app:latest | gzip > parking-app.tar.gz
+
+      - name: Copy Docker image to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host:  ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets. SERVER_USER }}
+          key:  ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          source: "parking-app.tar.gz"
+          target: "/tmp/"
+
+      - name: Deploy on server
+        uses: appleboy/ssh-action@v1. 0.3
+        with:
+          host:  ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets. SERVER_USER }}
+          key:  ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            # Load novi Docker image
+            docker load < /tmp/parking-app.tar. gz
+            
+            # Zaustavi i obriši stari kontejner ako postoji
+            docker stop parking-app 2>/dev/null || true
+            docker rm parking-app 2>/dev/null || true
+            
+            # Pokreni novi kontejner
+            docker run -d \
+              --name parking-app \
+              --restart unless-stopped \
+              -p 5000:5000 \
+              parking-app:latest
+            
+            # Očisti stare image-e
+            docker image prune -f
+            
+            # Obriši privremeni fajl
+            rm -f /tmp/parking-app.tar.gz
+            
+            echo "Deployment completed successfully!"
