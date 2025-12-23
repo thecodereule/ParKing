@@ -4,6 +4,7 @@ on:
   push:
     branches: 
       - master
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -16,9 +17,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image
+      - name: Build and Compress Docker image
         run: |
-          docker build -t parking-app:latest . 
+          # Buildamo image
+          docker build -t parking-app:latest .
+          
+          # Spremamo ga i komprimiramo (bez razmaka u imenu!)
           docker save parking-app:latest | gzip > parking-app.tar.gz
 
       - name: Setup SSH key
@@ -26,34 +30,52 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          chmod 700 ~/.ssh
           ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
       - name: Copy Docker image to server
-        run:  |
+        run: |
+          # Kopiranje na server (bez razmaka u ekstenziji)
           scp -P ${{ secrets.SERVER_PORT }} -i ~/.ssh/id_rsa parking-app.tar.gz ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp/parking-app.tar.gz
 
       - name: Deploy on server
         run: |
-          ssh -p ${{ secrets. SERVER_PORT }} -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
-            # Load novi Docker image
-            docker load < /tmp/parking-app.tar. gz
-            
-            # Zaustavi i obriši stari kontejner ako postoji
-            docker stop parking-app 2>/dev/null || true
-            docker rm parking-app 2>/dev/null || true
-            
-            # Pokreni novi kontejner
+          ssh -p ${{ secrets.SERVER_PORT }} -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+            # 1. PREKINI ODMAH AKO DOĐE DO GREŠKE
+            set -e
+
+            echo "🚀 Starting deployment script on server..."
+
+            # 2. Zaustavi i obriši stari kontejner (ako postoji)
+            # '|| true' osigurava da skripta ne pukne ako kontejner ne postoji
+            if [ "$(docker ps -a -q -f name=parking-app)" ]; then
+                echo "Stopping and removing existing container..."
+                docker stop parking-app
+                docker rm parking-app
+            fi
+
+            # 3. Učitaj NOVI image
+            # Prvo provjeravamo postoji li datoteka
+            if [ -f /tmp/parking-app.tar.gz ]; then
+                echo "Loading new docker image..."
+                docker load < /tmp/parking-app.tar.gz
+            else
+                echo "❌ Error: Image file not found at /tmp/parking-app.tar.gz"
+                exit 1
+            fi
+
+            # 4. Pokreni novi kontejner
+            echo "Starting new container..."
             docker run -d \
               --name parking-app \
               --restart unless-stopped \
               -p 5000:5000 \
               parking-app:latest
             
-            # Očisti stare image-e
+            # 5. Cleanup (Brišemo tar.gz i viseće image-e da ne trošimo prostor)
+            echo "Cleaning up..."
+            rm -f /tmp/parking-app.tar.gz
             docker image prune -f
             
-            # Obriši privremeni fajl
-            rm -f /tmp/parking-app.tar.gz
-            
-            echo "Deployment completed successfully!"
+            echo "✅ Deployment completed successfully!"
           EOF
