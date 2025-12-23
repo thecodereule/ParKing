@@ -19,7 +19,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t parking-app: latest .  
+          docker build -t parking-app:latest .  
           docker save parking-app:latest | gzip > parking-app.tar.gz
 
       - name: Setup SSH key
