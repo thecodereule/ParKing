@@ -10,14 +10,12 @@ Koristeći aplikaciju ParKing, uvijek znamo točno koliko je slobodnih parkirnih
 
 #### Skidanje koda s GitHub-a:
 ```
-cd ~/Downloads
 git clone https://github.com/thecodereule/ParKing.git
 cd ParKing
 ```
 
 #### Pokretanje Docker-a:
 ```
-sudo docker build --tag parking:1.1 --load .
-docker ps
-docker run -p 5000:8080 parking:1.1
+docker build -t parking-app .
+docker run -p 5000:5000 parking-app
 ```
