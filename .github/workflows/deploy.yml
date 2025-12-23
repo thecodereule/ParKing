@@ -4,6 +4,7 @@ on:
   push:
     branches: 
       - master
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -18,15 +19,15 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t parking-app:latest . 
+          docker build -t parking-app: latest .  
           docker save parking-app:latest | gzip > parking-app.tar.gz
 
       - name: Setup SSH key
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          mkdir -p ~/. ssh
+          echo "${{ secrets. SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_HOST }} >> ~/. ssh/known_hosts
 
       - name: Copy Docker image to server
         run:  |
@@ -35,12 +36,15 @@ jobs:
       - name: Deploy on server
         run: |
           ssh -p ${{ secrets. SERVER_PORT }} -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
-            # Load novi Docker image
-            docker load < /tmp/parking-app.tar. gz
-            
-            # Zaustavi i obriši stari kontejner ako postoji
+            # Zaustavi i obriši stari kontejner
             docker stop parking-app 2>/dev/null || true
             docker rm parking-app 2>/dev/null || true
+            
+            # Obriši stare image-e
+            docker rmi -f $(docker images -q parking-app) 2>/dev/null || true
+            
+            # Učitaj NOVI image
+            docker load < /tmp/parking-app.tar.gz
             
             # Pokreni novi kontejner
             docker run -d \
@@ -49,11 +53,9 @@ jobs:
               -p 5000:5000 \
               parking-app:latest
             
-            # Očisti stare image-e
+            # Cleanup
             docker image prune -f
-            
-            # Obriši privremeni fajl
-            rm -f /tmp/parking-app.tar.gz
+            rm -f /tmp/parking-app. tar.gz
             
             echo "Deployment completed successfully!"
           EOF
