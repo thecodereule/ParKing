@@ -11,3 +11,4 @@ six==1.16.0
 SQLAlchemy==2.0.31
 typing_extensions==4.12.2
 Werkzeug==3.0.3
+gunicorn==21.2.0
